@@ -1,0 +1,100 @@
+---
+title: "5 High-ROI AI Workflows Marketing Teams Ship This Quarter"
+description: "Five high-ROI AI workflows practitioners shipped in Q2 2026 — with build time, payoff math, and the governance pattern that survives past week three."
+slug: "5-high-roi-ai-workflows-shipping-this-quarter"
+category: "tools"
+tags: ["#deep-dive", "#case-study", "#for-marketers", "#intermediate"]
+locale: "en"
+translations:
+  kr: "/kr/blog/5-high-roi-ai-workflows-q2-2026"
+author: "eunice"
+publishedAt: "2026-04-26"
+heroImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80"
+heroAlt: "Analytics dashboard showing AI workflow ROI charts"
+readingTime: 7
+featured: true
+spotlight: true
+---
+
+> **TL;DR.** Five AI workflows our customers shipped in the last 90 days that paid back inside their first month. None of them require code; all of them require a small, boring governance habit. Pick one, copy the build pattern, and run it.
+
+We pulled the deployment data from 240+ StewardAI workspaces over Q1–Q2 2026 and ranked workflows by **median time-to-payback** (defined as: hours-saved × loaded marketer cost ≥ workflow build cost + 90 days of run cost). The top 5 below are the ones that paid back inside 30 days for at least 70% of the teams who shipped them.
+
+This is the *what* and the *math*. For the *how*, each links to a longer playbook.
+
+## #1 — SEO outline factory
+
+**What it does.** Given a target keyword, the agent fetches the live SERP, extracts the H2/H3 patterns from the top 10 ranking pages, identifies the sub-questions in People-Also-Ask, then drafts a structured outline + a TL;DR + a 5-question FAQ block. Writers take the outline and write the prose.
+
+**Build time.** ~ 2 hours from template.
+**Payback window.** Median 11 days.
+**Why it pays.** Outline quality drives ranking. Most teams' bottleneck is *outlining* speed, not writing speed — they sit on a keyword list for weeks because nobody has 90 minutes to research the SERP. The agent compresses that 90 minutes into 90 seconds.
+
+**Governance pattern.** A required field in every outline: *"What the SERP is missing that we will add."* Without this, the agent produces homogenized outlines and you become indistinguishable from competitors.
+
+## #2 — Stuck-deal nudger
+
+**What it does.** Watches your CRM. When an opportunity hasn't moved stage in 14 days, the agent reads the recent emails / calls / usage and DMs the AE: *likely blocker · single next action · confidence level*.
+
+**Build time.** ~ 30 minutes.
+**Payback window.** Median 4 days (yes, days).
+**Why it pays.** The base rate of *"deal I forgot about that I could've saved"* is ~ 1.5 per AE per month. At a typical $40k median deal size, the math works out to roughly the workflow's annual cost in a single recovered deal.
+
+**Governance pattern.** A redline list of forbidden suggestions (no discounting without manager sign-off, no executive escalation unless explicit). Output is logged but not auto-actioned.
+
+## #3 — Paid-ad QA bot
+
+**What it does.** Every new ad creative — copy, image, landing page link — is checked against a versioned checklist: brand-voice match, claim substantiation, accessibility, legal redlines, platform policy. Pass/fail report posted to the channel; humans tagged on fails.
+
+**Build time.** ~ 3 hours, plus a recurring 30-min/quarter checklist review.
+**Payback window.** Median 18 days.
+**Why it pays.** Catches the 2–4 ads/quarter that would have triggered a platform appeal (Meta, Google) — those appeals are 2–5 days of paused spend. Also kills the late-night Slack approval thrash.
+
+**Governance pattern.** The checklist is a versioned doc, not a prompt. Legal updates the doc; the workflow picks up the new clause on its next run. Audit log per ad.
+
+## #4 — Onboarding email personalizer
+
+**What it does.** Watches `signup` events. The agent looks at the new user's company website, their ICP segment, and the product features they're most likely to need — then drafts a personalized day-1 welcome email, day-3 nudge, and day-7 case-study suggestion. Sales rep approves with one click; emails send.
+
+**Build time.** ~ 4 hours (the longest on this list, mostly because of safety review on email content).
+**Payback window.** Median 23 days.
+**Why it pays.** Activation lift averaged 8–14 percentage points across the teams who shipped it. The agent isn't writing better copy than your best human — but it's writing it for the 90% of signups your humans would never have time to personalize.
+
+**Governance pattern.** Mandatory human approval before send. Brand-voice eval that fails on any draft mentioning competitors or pricing. Hard cap of 3 emails per signup, ever.
+
+## #5 — Weekly competitor digest
+
+**What it does.** Each Friday, the agent pulls the last 7 days of: competitor blog posts, pricing page changes, LinkedIn company posts, and G2 review additions. Outputs a 1-page digest with what changed, what's new, and the *one thing* worth a meeting next week.
+
+**Build time.** ~ 90 minutes.
+**Payback window.** Median 27 days (slowest on this list, but the most "stop doing manually" of the five).
+**Why it pays.** Replaces a weekly manual ritual that someone on the team was doing for 3–6 hours and dreading. Also surfaces the 2–3 things per quarter that should have been escalated to product / sales but weren't.
+
+**Governance pattern.** The digest links every claim to the source URL. No claim, no link → not in the digest. This kills hallucinated competitor moves, which is the single most common failure mode in this kind of workflow.
+
+## What ties the winners together
+
+Squint at the five and you'll see the same shape:
+
+- **Frequency:** all five run at least weekly. None of them are one-off "AI experiments".
+- **Output crispness:** every output is short, structured, and a human can mark it good/bad in under 60 seconds.
+- **Reversibility:** if the agent gets it wrong, a human fixes it in under 5 minutes. None of them auto-send to customers without approval.
+- **Governance shape:** every workflow has exactly one guardrail. Not five. One. Stack guardrails later, not in week one.
+
+The ones that *don't* pay back follow the opposite pattern: monthly cadence, fuzzy output, irreversible action, and zero governance. If you're building one and any of those four feel familiar, swap to one of the five above.
+
+## Build order if you have 90 days
+
+If you're starting from zero, ship in this order:
+
+1. **Stuck-deal nudger** (week 1) — fastest payback, smallest blast radius, builds the reflex.
+2. **SEO outline factory** (weeks 2–3) — biggest content lift, easiest to demonstrate ROI to leadership.
+3. **Paid-ad QA bot** (weeks 4–5) — kills a recurring late-night pain.
+4. **Weekly competitor digest** (weeks 6–7) — replaces a job nobody likes.
+5. **Onboarding email personalizer** (weeks 8–12) — biggest revenue lift, most governance work, save it for last.
+
+By month three, the marketing org's relationship to AI shifts from *"can we use it for…?"* to *"what's our 6th workflow?"*. That's the inflection.
+
+---
+
+**The build templates for all five are in the StewardAI Playbooks library.** Search `"q2-2026-roi-pack"` to import them as a bundle.

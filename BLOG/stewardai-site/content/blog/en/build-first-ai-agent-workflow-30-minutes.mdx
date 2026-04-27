@@ -1,0 +1,133 @@
+---
+title: "Build Your First AI Agent Workflow in 30 Minutes (No Code)"
+description: "Step-by-step playbook to ship a real AI agent workflow tonight — using a CRM trigger, a Slack notification, and one governance guardrail. Copy and adapt."
+slug: "build-first-ai-agent-workflow-30-minutes"
+category: "playbooks"
+tags: ["#playbook", "#beginner", "#for-marketers", "#crm"]
+locale: "en"
+translations:
+  kr: "/kr/blog/30-min-first-ai-agent-workflow"
+author: "eunice"
+publishedAt: "2026-04-25"
+updatedAt: "2026-04-27"
+heroImage: "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&w=1600&q=80"
+heroAlt: "Hands on a laptop building an automation workflow on a colorful canvas"
+readingTime: 6
+featured: true
+spotlight: true
+---
+
+> **TL;DR.** This is the workflow we have every new StewardAI customer ship in their first session: a Slack-delivered, CRM-triggered AI nudge that catches stalled deals. It is the Hello World of practitioner AI. 30 minutes start to finish, no code, and the first run pays for the next 11.
+
+If you've been blocked by *"I don't know what to build first"*, this post is your unblock. Open this in one tab, the StewardAI canvas in another, and ship before your coffee gets cold.
+
+## The workflow you're about to build
+
+**Trigger.** A CRM opportunity hasn't moved stages in 14 days.
+**Action.** An agent reads the recent emails, calls, and product usage tied to that account, then writes a 3-line Slack DM to the AE: *"What's likely stuck, and the single next action."*
+**Guardrail.** Brand-voice check + a redline list of things the agent is forbidden from suggesting.
+
+That's it. Three nodes, one guardrail, one Slack channel.
+
+## What you need before you start
+
+- A StewardAI account (free tier is fine).
+- An admin or integration token for your CRM (HubSpot / Salesforce / Pipedrive — any of the 80+ connectors).
+- A Slack workspace + permission to post in one channel.
+- 30 minutes uninterrupted.
+
+If you don't have CRM admin access, swap the trigger for *"row added to a Google Sheet"* — the rest of the workflow is identical.
+
+## Step 1 — Create the trigger (5 minutes)
+
+In StewardAI, hit **New Workflow → Start from blank**.
+
+Add a **Trigger** node. Pick your CRM. Choose the event: *"Opportunity stage unchanged for X days"*. Set X = 14, status = Open.
+
+Set the run frequency to "Daily, 8am local". You don't need realtime here — humans don't read Slack at 3am, and batching keeps cost predictable.
+
+**Test it.** StewardAI will show you the next 5 records that would have triggered today. Eyeball them. Do they look like real stuck deals? If yes, move on. If not, refine the filters (region, deal size) before continuing.
+
+## Step 2 — Add the data-fetcher (8 minutes)
+
+The agent can't help if it can't read. Add a **Fetch** node downstream of the trigger.
+
+Pull the last 30 days of:
+- Email subjects + bodies tied to the opportunity (not full HTML — text only, save tokens).
+- Call notes / meeting summaries.
+- Product usage events if you have them (logins, key actions).
+
+**Token tip.** Cap the email body to 1,000 characters per email and the total fetch to 8 emails. Most stalled deals reveal themselves in 4 messages — fetching more wastes money without improving output.
+
+## Step 3 — Add the agent node (10 minutes)
+
+This is the part that feels like magic and is actually the most boring step.
+
+Add an **Agent** node. Use the *Account Health* template. Replace the prompt body with this — verbatim:
+
+> *Role.* You are a senior sales coach. You read account context and suggest a single, specific next action.
+>
+> *Inputs.* Account name, stage, last activity dates, recent email/call notes summarized below.
+>
+> *Output, in three lines exactly:*
+> 1. **Likely blocker** (≤ 25 words).
+> 2. **One next action** the AE should take this week (≤ 25 words, must be specific and verifiable).
+> 3. **Confidence:** Low / Medium / High.
+>
+> *Rules:* Never recommend discounting. Never recommend escalating to the customer's executive team unless explicitly asked. If the inputs don't justify a clear answer, write `INSUFFICIENT_CONTEXT` and stop.
+
+Set model to your default (the platform picks a fast/cheap one for short outputs). Cap output to 200 tokens.
+
+**Test it on 3 records.** Read the outputs. They should sound like a sane colleague, not a marketing chatbot. If they're vague, your inputs are too thin — increase the email count to 12 in step 2.
+
+## Step 4 — Add the Slack notification (5 minutes)
+
+Add a **Slack** node. Post to a private channel — *not* a customer-facing one. Format:
+
+```
+:bell: Stuck deal: {account_name} ({stage}, {days_in_stage}d in stage)
+{agent_output}
+Open: {crm_link}
+```
+
+Keep it boring. Tagging the AE comes later — first prove the output is good enough that they want to be tagged.
+
+## Step 5 — Add the governance guardrail (2 minutes)
+
+Add a **Brand-voice check** between the agent and Slack.
+
+Use the *Sales coaching* eval set (10 sample outputs you mark good/bad once). The check fails if the output:
+- recommends discounting
+- contains a banned phrase from your style guide
+- exceeds 80 words total
+
+On fail, the workflow logs the run and skips the Slack post — it does *not* "fix" the output silently. You'll review fails on Friday and either tighten the prompt or expand the eval set.
+
+## Step 6 — Ship and watch (the next 7 days)
+
+Save → Activate. The first run is tomorrow at 8am.
+
+For the first week:
+- Read every Slack post the workflow produces — yes, all of them. This is your eval data.
+- Mark each as **Useful / Useless / Wrong**. StewardAI's review panel turns these into your next eval set automatically.
+- Don't change the prompt mid-week. You'll learn nothing if you keep moving.
+
+After 7 days, look at the **Useful** rate. Practitioners typically see 55–70% on day 1, climbing to 80%+ after one prompt revision. Below 50% means the inputs are too sparse — go back to step 2 and pull more context.
+
+## What to do once it's working
+
+Three add-ons, in order:
+
+1. **Tag the AE.** Once Useful rate ≥ 75%, replace the channel post with a DM to the deal owner.
+2. **Add a Friday digest.** A second workflow that summarizes the week's stuck deals into a digest your manager actually reads.
+3. **Plug it into your QBR.** Export the audit log per quarter — the agent's recommendations vs. what actually happened is a startlingly good coaching artifact.
+
+## The mindset shift
+
+The reason this workflow works is *not* the model. It's that you wrote down, on day one, exactly what the agent is allowed to do, what shape the output must take, and how you'll evaluate it. The model is the easy part.
+
+If you ship one workflow this month, ship this one. Then the next one will feel obvious.
+
+---
+
+**Want this exact workflow as importable JSON?** Grab it from the StewardAI Playbooks library — search "stuck deal nudge". Adjust the trigger, ship.

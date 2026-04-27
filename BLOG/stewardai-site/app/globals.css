@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 4%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --border: 240 6% 90%;
+    --ring: 263 70% 50%;
+  }
+
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 64%;
+    --border: 240 4% 16%;
+    --ring: 263 70% 60%;
+  }
+
+  html {
+    /* Mobile-first: prevent horizontal scroll on small viewports */
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    overscroll-behavior-y: none;
+  }
+
+  /* Hide scrollbar on horizontal rails (story rail, chip rail) */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* iOS safe-area support */
+  .pb-safe {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+  }
+  .pt-safe {
+    padding-top: max(env(safe-area-inset-top), 0.5rem);
+  }
+}
+
+@layer components {
+  /* SNS-style gradient avatar ring (Instagram-like) */
+  .ring-sns {
+    background: conic-gradient(
+      from 0deg,
+      #f59e0b 0deg,
+      #ec4899 90deg,
+      #7c3aed 180deg,
+      #06b6d4 270deg,
+      #f59e0b 360deg
+    );
+    padding: 2px;
+    border-radius: 9999px;
+  }
+
+  /* Gradient text utility */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-sns-gradient;
+  }
+
+  /* Glass card (Threads-like) */
+  .glass {
+    @apply bg-background/70 backdrop-blur-xl border border-border/60;
+  }
+
+  /* Tap target — minimum 44px (Apple HIG) */
+  .tap {
+    @apply min-h-[44px] min-w-[44px] inline-flex items-center justify-center;
+  }
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  @apply relative overflow-hidden bg-muted;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 1.6s linear infinite;
+  transform: translateX(-100%);
+}
